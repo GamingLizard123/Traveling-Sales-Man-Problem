@@ -1,4 +1,7 @@
 #include <iostream>
+#include <array>
+
+using namespace std;
 
 namespace util
 {
@@ -26,16 +29,20 @@ namespace util
         //each edge has an ID
         int edgeId;
 
+        //each edge has a weight, which by default is 0, and therfore unweighted
+        int weight;
+
         //each edge connects 2 nodes
         Node node1;
         Node node2;
 
         public:
-            Edge(Node givenNode1, Node givenNode2, int givenId)
+            Edge(Node givenNode1, Node givenNode2, int givenId, int givenWeight = 0)
             {
                 node1 = givenNode1;
                 node2 = givenNode2;
                 edgeId = givenId;
+                weight = givenWeight;
             }
 
             //returns a pointer to a node array
@@ -49,9 +56,78 @@ namespace util
                 return returnArray;
             }
 
+            //returns the ID of the edge
             int getId()
             {
                 return edgeId;
             }
+
+            //returns the weight of the edge
+            int getWeight()
+            {
+                return weight;
+            }
+    };
+
+    //adjecency matrix stores the 2d integer array
+    class adjacencyMatrix
+    {
+        //pointer to 2D array
+        int** matrix;
+        int sizeOfMatrix;
+
+        public:
+
+        adjacencyMatrix(int givenSize)
+        {
+            //set size
+            sizeOfMatrix = givenSize;
+            
+            //set the 2d matrix 
+            matrix = new int*[sizeOfMatrix];
+            for (int i = 0; i < sizeOfMatrix; i++)
+            {
+                matrix[i] = new int[sizeOfMatrix];
+                //populate matrix
+                for (int j = 0; j < sizeOfMatrix; j++)
+                {
+                    matrix[i][j] = 0;
+                }
+                
+            }
+            
+        }
+
+        //returns the matrix
+        int** getMatrix()
+        {
+            return matrix;
+        }
+
+        //returns the size of the matrix
+        int getSize()
+        {
+            return sizeOfMatrix;
+        }
+
+        //update matrix
+        bool updateMatrix(int i, int j, int value)
+        {
+            //if the value is 0 or 1 return true and set the value
+            if( value == 0 || value == 1)
+            {
+                matrix[i][j] = value;
+                return true;
+            }
+
+            //else return false
+            return false;
+        }
+
+        //get value of matrix
+        int getValueAt(int i, int j)
+        {
+            return matrix[i][j];
+        }
     };
 }
