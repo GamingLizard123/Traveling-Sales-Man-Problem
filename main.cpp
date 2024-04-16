@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "util.hpp"
 
 using namespace std;
@@ -9,7 +10,7 @@ using namespace util;
 //constants
     int Matrixsize = 5;
     Node* nodeArray;
-
+    vector<Edge> edgeVector;
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +24,21 @@ int main(int argc, char* argv[])
    //get the name of file
     string fileName = argv[1];
 
-   //open file
+   
+    
+
+    
+    
+    for (int i = 0; i < Matrixsize; i++)
+    {
+        Node tnode = nodeArray[i];
+        cout << "Node id: " << tnode.getId() << endl;
+    }
+}
+
+void readData(string fileName)
+{
+    //open file
     ifstream reader(fileName);
 
     //read file using while loop
@@ -31,8 +46,8 @@ int main(int argc, char* argv[])
     int count = 0;
     while(getline(reader, text))
     {
-        cout << text << endl;
-        //convert text to data
+        
+
         if(count == 0)
         {
             //convert to integer and set it to Matrixsize
@@ -51,25 +66,34 @@ int main(int argc, char* argv[])
         else
         {
             //create edges
-            //split the text into string array via the strtok() function
-            const int length = text.length();
-            char* textArr = new char[length]; 
-            
-            char* dataArr = strtok(textArr, ",");
+            string tmpdata;
+            vector<int> data;
 
+            //split string and add it to data vector
+            for(int i = 0; i < text.length() + 1; i++)
+            {
+
+                if(text[i] != ',' && text[i] != '\0'){
+                tmpdata += text[i];
+                }
+                else{
+
+                    data.push_back(stoi(tmpdata));
+
+                    tmpdata = "";
+                }
+            }
+            
+            //create a new edge
+            Edge newEdge(nodeArray[data.at(0)], nodeArray[data.at(1)], data.at(2));
+
+            //add edge to list of edges
+            edgeVector.push_back(newEdge);
         }
         //reset text string to be empty
         text = "";
+
         count++;
     }
 
-    
-
-    
-    
-    for (int i = 0; i < Matrixsize; i++)
-    {
-        Node tnode = nodeArray[i];
-        cout << "Node id: " << tnode.getId() << endl;
-    }
 }

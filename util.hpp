@@ -26,8 +26,6 @@ namespace util
     //edge class (undirected, unweigthed)
     class Edge
     {
-        //each edge has an ID
-        int edgeId;
 
         //each edge has a weight, which by default is 0, and therfore unweighted
         int weight;
@@ -37,11 +35,11 @@ namespace util
         Node node2;
 
         public:
-            Edge(Node givenNode1, Node givenNode2, int givenId, int givenWeight = 0)
+            Edge(Node givenNode1, Node givenNode2,  int givenWeight = 0)
             {
                 node1 = givenNode1;
                 node2 = givenNode2;
-                edgeId = givenId;
+            
                 weight = givenWeight;
             }
 
@@ -54,12 +52,6 @@ namespace util
                 returnArray[1] = node2;
 
                 return returnArray;
-            }
-
-            //returns the ID of the edge
-            int getId()
-            {
-                return edgeId;
             }
 
             //returns the weight of the edge
