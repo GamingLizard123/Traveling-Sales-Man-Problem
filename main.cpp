@@ -10,11 +10,12 @@ using namespace util;
 //constants
     int Matrixsize = 5;
     Node* nodeArray;
-    vector<Edge> edgeVector;
-
+    adjacencyMatrix* masterMatrix;
 
 void readData(string fileName)
 {
+    vector<Edge> edgeVector;
+
     //open file
     ifstream reader(fileName);
 
@@ -73,6 +74,7 @@ void readData(string fileName)
         count++;
     }
 
+    masterMatrix = new adjacencyMatrix(Matrixsize, edgeVector);
 }
 
 int main(int argc, char* argv[])
@@ -88,14 +90,10 @@ int main(int argc, char* argv[])
     string fileName = argv[1];
 
    
-    
+    //read the file and input data
     readData(fileName);
     
     
-    for (int i = 0; i < Matrixsize; i++)
-    {
-        Node tnode = nodeArray[i];
-        cout << "Node id: " << tnode.getId() << endl;
-    }
+    
 }
 

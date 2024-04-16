@@ -68,9 +68,12 @@ namespace util
         int** matrix;
         int sizeOfMatrix;
 
+        //array of edges
+        vector<Edge> edges;
+
         public:
 
-        adjacencyMatrix(int givenSize)
+        adjacencyMatrix(int givenSize, vector<Edge> givenEdges)
         {
             //set size
             sizeOfMatrix = givenSize;
@@ -88,6 +91,18 @@ namespace util
                 
             }
             
+            //get edges aray
+            edges = givenEdges;
+
+            //set matrix
+            for(int i; i < edges.size(); i++)
+            {
+                //get edge
+                Edge currentEdge = edges.at(i);
+
+                //get node ids as index and use the update function
+                this->updateMatrix(currentEdge.getEdge()[0].getId(), currentEdge.getEdge()[1].getId(), 1);
+            }
         }
 
         //returns the matrix
@@ -120,6 +135,11 @@ namespace util
         int getValueAt(int i, int j)
         {
             return matrix[i][j];
+        }
+
+        Edge getEdgeAt(int index)
+        {
+            return edges.at(index);
         }
     };
 
