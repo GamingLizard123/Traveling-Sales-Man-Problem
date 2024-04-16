@@ -1,49 +1,75 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "util.hpp"
 
 using namespace std;
 using namespace util;
 
 //constants
-    const int Matrixsize = 5;
-    const int length = 5;
+    int Matrixsize = 5;
+    Node* nodeArray;
 
-//run main 
-int main()
+
+int main(int argc, char* argv[])
 {
+   //ensure that there is a command line argument
+   if(argc != 2)
+   {
+    cout << "File requires 1 command line argument of file name"<<endl;
+    return 1;
+   }
    
+   //get the name of file
+    string fileName = argv[1];
 
-    Node nodeArray [length];
+   //open file
+    ifstream reader(fileName);
 
-    for(int i = 0; i < length; i++)
+    //read file using while loop
+    string text;
+    int count = 0;
+    while(getline(reader, text))
     {
-        Node tnode(i);
+        cout << text << endl;
+        //convert text to data
+        if(count == 0)
+        {
+            //convert to integer and set it to Matrixsize
+            Matrixsize = stoi(text);
+            
+            //create the nodes       
+            nodeArray = new Node[Matrixsize];     
+            for(int i = 0; i < Matrixsize; i++)
+            {
+                //create new node
+                Node tnode(i);
+                //store it in the array of nodes
+                nodeArray[i] = tnode;
+            }
+        }
+        else
+        {
+            //create edges
+            //split the text into string array via the strtok() function
+            const int length = text.length();
+            char* textArr = new char[length]; 
+            
+            char* dataArr = strtok(textArr, ",");
 
-        nodeArray[i] = tnode;
+        }
+        //reset text string to be empty
+        text = "";
+        count++;
     }
+
     
-    for (int i = 0; i < length; i++)
+
+    
+    
+    for (int i = 0; i < Matrixsize; i++)
     {
         Node tnode = nodeArray[i];
         cout << "Node id: " << tnode.getId() << endl;
     }
-
-    Edge newEdge(nodeArray[0], nodeArray[1], 0);
-    cout << "New Edge Made: " << newEdge.getEdge()[0].getId() << ", " <<newEdge.getEdge()[1].getId() << endl;
-
-
-    adjacencyMatrix matrix(Matrixsize);
-
-    cout << "value at 0, 0: " << matrix.getValueAt(0,0) << endl;
-
-    cout << "set value at 1,1: ";
-    int value;
-    cin >> value;
-
-    bool returnedBool = matrix.updateMatrix(1,1, value);
-    
-    cout << "Value set succesfully: " << returnedBool << endl;
-    cout << "Value at 1,1: " << matrix.getValueAt(1,1) << endl;
-
-    return 0;
 }

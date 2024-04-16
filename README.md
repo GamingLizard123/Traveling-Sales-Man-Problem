@@ -12,4 +12,6 @@ Run the main.exe file to start the program
 ## How to format txt file for graph
 1st line is the number of nodes
 The following lines define edges between 2 verticies as follows (the first vertice being 0, and the last one is n-1):
-1st node, 2nd node, weight of edge.
+1st node,2nd node,weight of edge.
+### Warning
+please ensure there are no spaces in the txt file, it will break the program otherwise
