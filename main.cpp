@@ -12,29 +12,6 @@ using namespace util;
     Node* nodeArray;
     vector<Edge> edgeVector;
 
-int main(int argc, char* argv[])
-{
-   //ensure that there is a command line argument
-   if(argc != 2)
-   {
-    cout << "File requires 1 command line argument of file name"<<endl;
-    return 1;
-   }
-   
-   //get the name of file
-    string fileName = argv[1];
-
-   
-    
-
-    
-    
-    for (int i = 0; i < Matrixsize; i++)
-    {
-        Node tnode = nodeArray[i];
-        cout << "Node id: " << tnode.getId() << endl;
-    }
-}
 
 void readData(string fileName)
 {
@@ -97,3 +74,28 @@ void readData(string fileName)
     }
 
 }
+
+int main(int argc, char* argv[])
+{
+   //ensure that there is a command line argument
+   if(argc != 2)
+   {
+    cout << "File requires 1 command line argument of file name"<<endl;
+    return 1;
+   }
+   
+   //get the name of file
+    string fileName = argv[1];
+
+   
+    
+    readData(fileName);
+    
+    
+    for (int i = 0; i < Matrixsize; i++)
+    {
+        Node tnode = nodeArray[i];
+        cout << "Node id: " << tnode.getId() << endl;
+    }
+}
+
