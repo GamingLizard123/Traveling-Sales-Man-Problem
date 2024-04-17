@@ -5,6 +5,9 @@ using namespace std;
 
 namespace util
 {
+   
+
+
     //node class
     class Node
     {
@@ -73,6 +76,8 @@ namespace util
 
         public:
 
+        adjacencyMatrix() : matrix(nullptr), sizeOfMatrix(0) {}
+
         adjacencyMatrix(int givenSize, vector<Edge> givenEdges)
         {
             //set size
@@ -118,7 +123,7 @@ namespace util
         }
 
         //update matrix
-        bool updateMatrix(int i, int j, int value)
+        virtual bool updateMatrix(int i, int j, int value)
         {
             //if the value is 0 or 1 return true and set the value
             if( value == 0 || value == 1)
@@ -143,5 +148,68 @@ namespace util
         }
     };
 
+    //population adjencency matrix to make up children
+    
+    class populationMatrix : public adjacencyMatrix
+    {
+        static adjacencyMatrix masterMatrix;
+
+        int** matrix;
+
+        public:
+
+        populationMatrix()
+        {
+            //make sure masterMatrix has been initialized
+            if(masterMatrix.getSize() == 0)
+            {
+                throw runtime_error("Master Matrix has not been set");
+            }
+
+            //get the size of the master matrix
+            int sizeOfMatrix = masterMatrix.getSize();
+            
+            //set the population adjencency matrix
+            matrix = new int*[sizeOfMatrix];
+            for (int i = 0; i < sizeOfMatrix; i++)
+            {
+                matrix[i] = new int[sizeOfMatrix];
+                //populate matrix
+                for (int j = 0; j < sizeOfMatrix; j++)
+                {
+                    matrix[i][j] = 0;
+                }
+                
+            }
+        }
+
+        //update matrix
+        bool updateMatrix (int i, int j, int value) override
+        {
+            //make sure it is a valid position to change in master matrix
+            if(masterMatrix.getValueAt(i, j) != 1)
+            {
+                return false;
+            }
+            //if the value is 0 or 1 return true and set the value
+            if( value == 0 || value == 1)
+            {
+                matrix[i][j] = value;
+                return true;
+            }
+
+            //else return false
+            return false;
+        }
+
+        //set the master matrix
+        static void setMasterMatrix(adjacencyMatrix givenMasterMatrix)
+        {
+            masterMatrix = givenMasterMatrix;
+        }
+
+
+    };
+    adjacencyMatrix populationMatrix::masterMatrix;
     
 }

@@ -93,7 +93,6 @@ int main(int argc, char* argv[])
     //read the file and input data
     readData(fileName);
     
-    
-    
+    populationMatrix::setMasterMatrix(*masterMatrix);
 }
 
