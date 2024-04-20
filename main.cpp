@@ -2,15 +2,22 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 #include "util.hpp"
 
 using namespace std;
 using namespace util;
 
 //constants
+    const int populationSize = 10;
     int Matrixsize = 5;
     Node* nodeArray;
     adjacencyMatrix* masterMatrix;
+    vector<populationMatrix> currentPopulation;
+
+    //Stores the average fitness of population over iterations
+    vector<int> fitnessOverIterations;
 
 void readData(string fileName)
 {
@@ -77,8 +84,32 @@ void readData(string fileName)
     masterMatrix = new adjacencyMatrix(Matrixsize, edgeVector);
 }
 
+void initializePopulation()
+{
+    for(int i = 0; i < populationSize; i++)
+    {
+        //create a new population matrix
+        populationMatrix tmpMatrix;
+
+        //set the variable
+        for(int j = 0; j < masterMatrix->getSize(); j++)
+        {
+            for(int k = 0; masterMatrix -> getSize(); k++)
+            {
+                int value = static_cast<double>(rand()) / RAND_MAX;
+                tmpMatrix.updateMatrix(j, k, value);
+            }
+        }
+
+        //store the tmp matrix
+        currentPopulation.push_back(tmpMatrix);
+    }
+}
+
 int main(int argc, char* argv[])
 {
+    //seed random
+    srand(static_cast<unsigned int>(time(nullptr)));
    //ensure that there is a command line argument
    if(argc != 2)
    {
@@ -94,5 +125,22 @@ int main(int argc, char* argv[])
     readData(fileName);
     
     populationMatrix::setMasterMatrix(*masterMatrix);
+
+    //initialize a population
+    initializePopulation();
+    cout << "Done";
+    //loop for x number of iterations
+    //for each iteration
+    //get fitness of population
+    //log average fitness
+    //get top 4
+    //tournament style elimination (bias towards parent of greater fitness)
+    //create new temporary population vector
+    //store parents
+    //create children and induce random mutation
+    //store children in tmp population vector
+    //replace old population
 }
 
+
+// TODO: make a fitness function

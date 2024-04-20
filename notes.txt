@@ -1,0 +1,5 @@
+Notes:
+
+The population will be a vector of adjencency matrixes.
+However to make sure that the matrixes actually follow the set master matrix these will be a seperate class.
+Within this class take in the master matrix, to set it, and every time you wish to update this population matrix make sure to refrence the given master matrix to ensure that all set edges are valid ones.
