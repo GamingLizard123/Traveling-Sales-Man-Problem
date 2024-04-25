@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
-#include <ctime>
+#include <random>
 #include "util.hpp"
 
 using namespace std;
@@ -15,6 +15,7 @@ using namespace util;
     Node* nodeArray;
     adjacencyMatrix* masterMatrix;
     vector<populationMatrix> currentPopulation;
+    int iterations = NULL;
 
     //Stores the average fitness of population over iterations
     vector<int> fitnessOverIterations;
@@ -90,13 +91,27 @@ void initializePopulation()
     {
         //create a new population matrix
         populationMatrix tmpMatrix;
-
         //set the variable
         for(int j = 0; j < masterMatrix->getSize(); j++)
         {
-            for(int k = 0; masterMatrix -> getSize(); k++)
+           
+
+            for(int k = 0; k < masterMatrix -> getSize(); k++)
             {
-                int value = static_cast<double>(rand()) / RAND_MAX;
+                //generate numbers randomly
+                random_device rd;
+                mt19937 gen(rd());
+                uniform_int_distribution<> dis(0,1);
+                int value = dis(gen);
+
+               //ensure that values are between 1 and 0
+                if(value < 0 || value > 1)
+                {
+                    cout << "error in creating population size, value of input is incorrect" << endl;
+                    throw exception();
+                }
+                
+                //update matrix based on random number
                 tmpMatrix.updateMatrix(j, k, value);
             }
         }
@@ -108,8 +123,7 @@ void initializePopulation()
 
 int main(int argc, char* argv[])
 {
-    //seed random
-    srand(static_cast<unsigned int>(time(nullptr)));
+
    //ensure that there is a command line argument
    if(argc != 2)
    {
@@ -128,8 +142,25 @@ int main(int argc, char* argv[])
 
     //initialize a population
     initializePopulation();
-    cout << "Done";
+    cout << "Finished Generating staring population" << endl;
+
+    //get input for iterations
+    cout << "Iterations: ";
+    string tmpInput;
+    getline(cin, tmpInput);
+    
+    if(tmpInput.empty())
+    {
+        iterations = 20;
+    }
+    else{
+        iterations = stoi(tmpInput);
+    }
+    cout << iterations << " Iterations will commence" << endl;
+
     //loop for x number of iterations
+    for(int i = 0; i < iterations; i++)
+    {
     //for each iteration
     //get fitness of population
     //log average fitness
@@ -140,6 +171,7 @@ int main(int argc, char* argv[])
     //create children and induce random mutation
     //store children in tmp population vector
     //replace old population
+    }
 }
 
 
