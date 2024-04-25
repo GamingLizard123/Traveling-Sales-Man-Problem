@@ -186,6 +186,7 @@ namespace util
             //make sure it is a valid position to change in master matrix
             if(masterMatrix.getValueAt(i, j) != 1)
             {
+                
                 return false;
             }
             //if the value is 0 or 1 return true and set the value
@@ -197,6 +198,16 @@ namespace util
 
             //else return false
             return false;
+        }
+
+        int getSize()
+        {
+            return masterMatrix.getSize();
+        }
+
+        int getValueAt(int i, int j)
+        {
+            return matrix[i][j];
         }
 
         //set the master matrix

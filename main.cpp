@@ -85,6 +85,19 @@ void readData(string fileName)
     masterMatrix = new adjacencyMatrix(Matrixsize, edgeVector);
 }
 
+void printPopMatrix(populationMatrix tmpM)
+{
+    for(int row = 0; row < tmpM.getSize(); row++)
+    {
+        for(int col = 0; col < tmpM.getSize(); col++)
+        {
+            cout << tmpM.getValueAt(row, col) << " ";
+        }
+        cout << endl;
+    }
+    cout << "-----------------" << endl;
+}
+
 void initializePopulation()
 {
     for(int i = 0; i < populationSize; i++)
@@ -94,7 +107,6 @@ void initializePopulation()
         //set the variable
         for(int j = 0; j < masterMatrix->getSize(); j++)
         {
-           
 
             for(int k = 0; k < masterMatrix -> getSize(); k++)
             {
@@ -110,15 +122,42 @@ void initializePopulation()
                     cout << "error in creating population size, value of input is incorrect" << endl;
                     throw exception();
                 }
-                
                 //update matrix based on random number
                 tmpMatrix.updateMatrix(j, k, value);
             }
         }
-
+        printPopMatrix(tmpMatrix);
         //store the tmp matrix
         currentPopulation.push_back(tmpMatrix);
     }
+}
+
+// TODO: make a fitness function
+int fitnessFunction(populationMatrix givenMatrix)
+{
+    //find if there are any loops
+    //store the nodes that have been iterated
+    vector<int> nodesIteratedThrough;
+    //if there are any loop return 0
+    //else find the the total weight of the graph
+}
+
+
+float averageFitness(vector<int> fitness)
+{
+    float avg = 0;
+    
+    //add the each value of the given vector
+    for(int i = 0; i < fitness.size(); i++)
+    {
+        avg += fitness.at(i);
+    }
+
+    //divide by the size of the vector
+    avg = avg/fitness.size();
+    
+    //return the average
+    return avg;
 }
 
 int main(int argc, char* argv[])
@@ -144,6 +183,8 @@ int main(int argc, char* argv[])
     initializePopulation();
     cout << "Finished Generating staring population" << endl;
 
+    
+
     //get input for iterations
     cout << "Iterations: ";
     string tmpInput;
@@ -161,18 +202,25 @@ int main(int argc, char* argv[])
     //loop for x number of iterations
     for(int i = 0; i < iterations; i++)
     {
-    //for each iteration
-    //get fitness of population
-    //log average fitness
-    //get top 4
-    //tournament style elimination (bias towards parent of greater fitness)
-    //create new temporary population vector
-    //store parents
-    //create children and induce random mutation
-    //store children in tmp population vector
-    //replace old population
+        //for each iteration get fitness
+        vector<int> fitness; 
+
+        //get fitness of population
+        for(populationMatrix popMatrix : currentPopulation)
+        {
+            int popFitness = fitnessFunction(popMatrix);
+            fitness.push_back(popFitness);
+        }
+
+        //log average fitness
+        fitnessOverIterations.push_back(averageFitness(fitness));
+
+        //get top 4
+        //tournament style elimination (bias towards parent of greater fitness)
+        //create new temporary population vector
+        //store parents
+        //create children and induce random mutation
+        //store children in tmp population vector
+        //replace old population
     }
 }
-
-
-// TODO: make a fitness function
