@@ -178,6 +178,16 @@ int main(int argc, char* argv[])
     readData(fileName);
     
     populationMatrix::setMasterMatrix(*masterMatrix);
+    
+    for(int i = 0; i < masterMatrix->getSize(); i++)
+    {
+        for(int j = 0; j < masterMatrix -> getSize(); j++)
+        {
+            cout << masterMatrix->getMatrix()[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "---- master matrix ----" << endl;
 
     //initialize a population
     initializePopulation();
