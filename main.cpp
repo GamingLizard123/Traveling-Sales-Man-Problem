@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <set>
 #include <cstdlib>
 #include <random>
 #include "util.hpp"
@@ -9,16 +10,26 @@
 using namespace std;
 using namespace util;
 
-//constants
-    const int populationSize = 10;
-    int Matrixsize = 5;
-    Node* nodeArray;
-    adjacencyMatrix* masterMatrix;
-    vector<populationMatrix> currentPopulation;
-    int iterations = NULL;
+//declerations
 
-    //Stores the average fitness of population over iterations
-    vector<int> fitnessOverIterations;
+void readData(string fileName);
+void printPopMatrix(populationMatrix tmpM);
+void initializePopulation();
+set<int> traverse(populationMatrix givenMatrix, set<int> traversedNodes, int currentNode);
+bool isTraversable(populationMatrix givenMatrix);
+int fitnessFunction(populationMatrix givenMatrix);
+float averageFitness(vector<int> fitness);
+
+//constants
+const int populationSize = 10;
+int Matrixsize = 5;
+Node* nodeArray;
+adjacencyMatrix* masterMatrix;
+vector<populationMatrix> currentPopulation;
+int iterations = NULL;
+
+//Stores the average fitness of population over iterations
+vector<int> fitnessOverIterations;
 
 void readData(string fileName)
 {
@@ -95,6 +106,11 @@ void printPopMatrix(populationMatrix tmpM)
         }
         cout << endl;
     }
+    if(isTraversable(tmpM))
+    {
+        cout << "true" << endl;
+    }
+    else { cout << "false" << endl;}
     cout << "-----------------" << endl;
 }
 
@@ -132,16 +148,68 @@ void initializePopulation()
     }
 }
 
-// TODO: make a fitness function
-int fitnessFunction(populationMatrix givenMatrix)
+set<int> traverse(populationMatrix givenMatrix, set<int> traversedNodes, int currentNode)
 {
-    //find if there are any loops
-    //store the nodes that have been iterated
-    vector<int> nodesIteratedThrough;
-    //if there are any loop return 0
-    //else find the the total weight of the graph
+
+    //base case
+    if(traversedNodes.count(currentNode) > 0)
+    {
+        return {};
+    }
+
+    traversedNodes.insert(currentNode);
+
+    //find its adjavent nodes
+    vector<int> adjacentNodes;
+
+    for(int i = 0; i < Matrixsize; i++)
+    {
+        
+        if(givenMatrix.getValueAt(currentNode, i) == 1)
+        {    
+            adjacentNodes.push_back(i);
+        }
+    }
+    vector<set<int>> traverses; 
+    //from its adjacent nodes add node to traversed nodes
+    for(int node : adjacentNodes)
+    {
+        
+        //if the node doesn't exist in traversed nodes then call recursive function
+        if(traversedNodes.count(node) == 0)
+        {
+            traverses.push_back(traverse(givenMatrix, traversedNodes, node));
+        }
+    }
+
+    //add up all the sets
+    for(set<int> set : traverses)
+    {
+        for(int value : set)
+        {
+            traversedNodes.insert(value);
+        }
+    }
+
+    //return the set
+    return traversedNodes;
 }
 
+bool isTraversable(populationMatrix givenMatrix)
+{
+    //attempt to traverse via recursive function
+    set<int> traversedNodes;
+
+    //start recursive function
+    traversedNodes = traverse(givenMatrix, traversedNodes, 0);
+
+    //if the size is the same as the size of matrix then true
+    if(traversedNodes.size() == Matrixsize)
+    {return true;}
+    
+    //otherwise its false
+    return false;
+}
 
 float averageFitness(vector<int> fitness)
 {
@@ -159,6 +227,34 @@ float averageFitness(vector<int> fitness)
     //return the average
     return avg;
 }
+
+bool loopCheck(populationMatrix givenMatrix, vector<bool> traversedNodes, int currentNode)
+{
+    
+}
+
+bool hasLoop(populationMatrix givenMatrix)
+{
+
+}
+
+// TODO: make a fitness function
+int fitnessFunction(populationMatrix givenMatrix)
+{
+    //population matrix is a directed graph
+    //make sure that all the nodes are reacheable by choosing one node randomly and traversing it entirely
+    if(isTraversable(givenMatrix))
+    {
+        //then make sure it has no loops
+        if(!hasLoop(givenMatrix))
+        {
+        //then get weight of the graph as the fitness
+        }
+    }
+    
+    return 0;
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -179,7 +275,7 @@ int main(int argc, char* argv[])
     
     populationMatrix::setMasterMatrix(*masterMatrix);
     
-    for(int i = 0; i < masterMatrix->getSize(); i++)
+    /*for(int i = 0; i < masterMatrix->getSize(); i++)
     {
         for(int j = 0; j < masterMatrix -> getSize(); j++)
         {
@@ -187,7 +283,7 @@ int main(int argc, char* argv[])
         }
         cout << endl;
     }
-    cout << "---- master matrix ----" << endl;
+    cout << "---- master matrix ----" << endl;*/
 
     //initialize a population
     initializePopulation();
