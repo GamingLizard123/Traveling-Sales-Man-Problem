@@ -17,8 +17,11 @@ void printPopMatrix(populationMatrix tmpM);
 void initializePopulation();
 set<int> traverse(populationMatrix givenMatrix, set<int> traversedNodes, int currentNode);
 bool isTraversable(populationMatrix givenMatrix);
+bool loopCheck(populationMatrix givenMatrix, vector<bool> traversedNodes, int currentNode);
+bool hasLoop(populationMatrix givenMatrix);
 int fitnessFunction(populationMatrix givenMatrix);
 float averageFitness(vector<int> fitness);
+
 
 //constants
 const int populationSize = 10;
@@ -108,7 +111,12 @@ void printPopMatrix(populationMatrix tmpM)
     }
     if(isTraversable(tmpM))
     {
-        cout << "true" << endl;
+        cout << "Traversable: true" << endl;
+    }
+    else { cout << "false" << endl;}
+    if(hasLoop(tmpM))
+    {
+        cout << "hasLoop: true" << endl;
     }
     else { cout << "false" << endl;}
     cout << "-----------------" << endl;
@@ -230,12 +238,36 @@ float averageFitness(vector<int> fitness)
 
 bool loopCheck(populationMatrix givenMatrix, vector<bool> traversedNodes, int currentNode)
 {
-    
+    //base case: if the current node has already been traversed return true
+    if(traversedNodes[currentNode])
+    {
+        return true;
+    }
+
+    //change the current node to true and pass it on
+    traversedNodes.at(currentNode) = true;
+    //find the adjacent nodes
+    for(int i = 0; i < Matrixsize; i++)
+    {
+        if(givenMatrix.getValueAt(currentNode, i) == 1)
+        {
+            if(loopCheck(givenMatrix, traversedNodes, i))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool hasLoop(populationMatrix givenMatrix)
 {
-
+    //set up the bool vector
+    vector<bool> traversedNodes(Matrixsize, false);
+    
+    
+    //start recursive function
+    return loopCheck(givenMatrix, traversedNodes, 0);
 }
 
 // TODO: make a fitness function
