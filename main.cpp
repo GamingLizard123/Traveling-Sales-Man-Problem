@@ -113,12 +113,12 @@ void printPopMatrix(populationMatrix tmpM)
     {
         cout << "Traversable: true" << endl;
     }
-    else { cout << "false" << endl;}
+    else { cout << "Traversable: false" << endl;}
     if(hasLoop(tmpM))
     {
-        cout << "hasLoop: true" << endl;
+        cout << "Has loop: true" << endl;
     }
-    else { cout << "false" << endl;}
+    else { cout << "Has loop: false" << endl;}
     cout << "-----------------" << endl;
 }
 
@@ -131,23 +131,25 @@ void initializePopulation()
         //set the variable
         for(int j = 0; j < masterMatrix->getSize(); j++)
         {
-
-            for(int k = 0; k < masterMatrix -> getSize(); k++)
-            {
-                //generate numbers randomly
-                random_device rd;
-                mt19937 gen(rd());
-                uniform_int_distribution<> dis(0,1);
-                int value = dis(gen);
-
-               //ensure that values are between 1 and 0
-                if(value < 0 || value > 1)
+            //as long as it isn't the last node, that way we ensure a tree, and we define the last node as the destination
+            if(j != masterMatrix->getSize()-1){
+                for(int k = 0; k < masterMatrix -> getSize(); k++)
                 {
-                    cout << "error in creating population size, value of input is incorrect" << endl;
-                    throw exception();
+                    //generate numbers randomly
+                    random_device rd;
+                    mt19937 gen(rd());
+                    uniform_int_distribution<> dis(0,1);
+                    int value = dis(gen);
+
+                //ensure that values are between 1 and 0
+                    if(value < 0 || value > 1)
+                    {
+                        cout << "error in creating population size, value of input is incorrect" << endl;
+                        throw exception();
+                    }
+                    //update matrix based on random number
+                    tmpMatrix.updateMatrix(j, k, value);
                 }
-                //update matrix based on random number
-                tmpMatrix.updateMatrix(j, k, value);
             }
         }
         printPopMatrix(tmpMatrix);
@@ -270,21 +272,33 @@ bool hasLoop(populationMatrix givenMatrix)
     return loopCheck(givenMatrix, traversedNodes, 0);
 }
 
+bool reachesEnd(populationMatrix givenMatrix)
+{
+    int** matrix = givenMatrix.getMatrix();
+    for(int i = 0; i < Matrixsize; i++)
+    {
+        if(matrix[i][Matrixsize-1] == 1)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 // TODO: make a fitness function
 int fitnessFunction(populationMatrix givenMatrix)
 {
-    //population matrix is a directed graph
-    //make sure that all the nodes are reacheable by choosing one node randomly and traversing it entirely
-    if(isTraversable(givenMatrix))
+    //the total score
+    int score = 0;
+    //TODO make sure it has reached the last node by just checking the last column in the matrix
+    if(!hasLoop(givenMatrix) && reachesEnd(givenMatrix))
     {
-        //then make sure it has no loops
-        if(!hasLoop(givenMatrix))
+        if(isTraversable(givenMatrix))
         {
-        //then get weight of the graph as the fitness
+            score += 10;
         }
     }
     
-    return 0;
+    return score;
 }
 
 

@@ -3,3 +3,17 @@ Notes:
 The population will be a vector of adjencency matrixes.
 However to make sure that the matrixes actually follow the set master matrix these will be a seperate class.
 Within this class take in the master matrix, to set it, and every time you wish to update this population matrix make sure to refrence the given master matrix to ensure that all set edges are valid ones.
+
+
+we don't have to make it traversable, just add points if all the points are traversable
+extra points should be given for each town you visit
+you also have to make sure you can reach the last node
+make sure each of the lines in the adjencency matrix only has one node out of it
+
+redo the initialization technique:
+- choose a starting node randomly as long as it isn't the ending node
+- choose a destination randomly 
+- recursively go to that node and choose a destination randomly as long as it isn't the parent node
+- do this until you:
+    a) reach a node that you have already travled to 
+    b) reached the destination node
